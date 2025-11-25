@@ -3,37 +3,53 @@ let stream = null;
 
 async function startCamera() {
   try {
-    stream = await navigator.mediaDevices.getUserMedia({ video: true });
-    video.srcObject = stream;
-    video.style.display = 'block';
-    // Enviar frames para o Django
-  setInterval(() => {
-    if (!stream) return;
-    if (video.videoWidth === 0) return;
+      // Solicita resolução maior
+      stream = await navigator.mediaDevices.getUserMedia({
+          video: { width: { ideal: 1280 }, height: { ideal: 720 } }
+      });
 
-    const canvas = document.createElement("canvas");
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    canvas.getContext("2d").drawImage(video, 0, 0);
+      const video = document.getElementById("videoElement");
+      video.srcObject = stream;
+      video.style.display = "block";
 
-    const frameData = canvas.toDataURL("image/jpeg");
+      // Canvas criado UMA VEZ
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
 
-    fetch("/process-frame/", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ frame: frameData })
-    })
-      .then(res => res.json())
-      .then(data => console.log(data))
-      .catch(err => console.error("Erro:", err));
+      // Enviar frames a cada 200ms (5 FPS)
+      intervalId = setInterval(() => {
+          if (!stream || video.videoWidth === 0) return;
 
-  }, 200); // 5 FPS
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
+
+          // Desenha o frame
+          ctx.drawImage(video, 0, 0);
+
+          // Alta qualidade do JPEG 
+          const frameData = canvas.toDataURL("image/jpeg", 1.0);
+
+          fetch("/process-frame/", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ frame: frameData })
+          })
+              .then(res => res.json())
+              .then(data => {
+                // Receni d volta
+                document.getElementById('response').textContent = data.sinal || "N recebi nd"
+                console.log(data)
+              })
+              .catch(err => console.error("Erro:", err));
+
+      }, 500);
 
   } catch (err) {
-    console.error('Erro', err);
-    alert('Erro ao acessar câmera.');
+      console.error("Erro:", err);
+      alert("Erro ao acessar a câmera.");
   }
 }
+
 
 function stopCamera() {
   if (stream) {

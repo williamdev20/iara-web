@@ -7,6 +7,7 @@ import json
 import base64
 import numpy as np
 import cv2
+import os
 
 @login_required(login_url="/accounts/login/")
 def camera(request):
@@ -25,6 +26,8 @@ def process_frame(request):
         img_bytes = base64.b64decode(frame_base64)
         np_arr = np.frombuffer(img_bytes, np.uint8)
         frame = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
+        frame = cv2.flip(frame, 1)
+
 
         sinal, confianca = processing.processar_frame(frame)
 
@@ -32,7 +35,6 @@ def process_frame(request):
             "sinal": sinal,
             "confianca": float(confianca)
         })
-
 
     except Exception as e:
         return JsonResponse({"erro": str(e)}, status=400)
