@@ -26,12 +26,13 @@ def process_frame(request):
         np_arr = np.frombuffer(img_bytes, np.uint8)
         frame = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
 
-        print("Recebi frame:", frame.shape)
+        sinal, confianca = processing.processar_frame(frame)
 
-        # aqui você roda a IA dps
-        # resultado = modelo.predict(frame)
+        return JsonResponse({
+            "sinal": sinal,
+            "confianca": float(confianca)
+        })
 
-        return JsonResponse({"status": "ok", "msg": "frame recebido!"})
 
     except Exception as e:
         return JsonResponse({"erro": str(e)}, status=400)
