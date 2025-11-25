@@ -1,12 +1,5 @@
 import os
 import logging
-
-# Suprimir warnings antes de importar bibliotecas pesadas
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
-os.environ['GLOG_minloglevel'] = '2'
-logging.getLogger('mediapipe').setLevel(logging.ERROR)
-logging.getLogger('tensorflow').setLevel(logging.ERROR)
-
 import cv2
 import mediapipe as mp
 import pandas as pd
@@ -14,6 +7,17 @@ import math
 import json
 from collections import Counter
 import numpy as np
+
+# Isso serve pra remover os warnings do tensorflow
+
+# Esconde os warnings do Tensorflow (menores que o nível "3")
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+# Mostrar apenas erros um mais graves que o nível "2"
+os.environ['GLOG_minloglevel'] = '2'
+# Colocar apenas os ERROS GRAVES do Mediapipe
+logging.getLogger('mediapipe').setLevel(logging.ERROR)
+# Colocar apenas os ERROS GRAVES do Tensorflow
+logging.getLogger('tensorflow').setLevel(logging.ERROR)
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 dataset = os.path.join(BASE_DIR, "data", "dataset.csv")
