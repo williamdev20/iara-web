@@ -1,58 +1,81 @@
 const video = document.getElementById('videoElement');
 let stream = null;
+let intervalId = null;
 
 async function startCamera() {
   try {
-      // Solicita resolução maior
-      stream = await navigator.mediaDevices.getUserMedia({
-          video: { width: { ideal: 1280 }, height: { ideal: 720 } }
-      });
+    stream = await navigator.mediaDevices.getUserMedia({
+      video: { width: { ideal: 1280 }, height: { ideal: 720 } },
+    });
 
-      const video = document.getElementById("videoElement");
-      video.srcObject = stream;
-      video.style.display = "block";
+    const video = document.getElementById('videoElement');
+    video.srcObject = stream;
+    video.style.display = 'block';
 
-      // Canvas criado UMA VEZ
-      const canvas = document.createElement("canvas");
-      const ctx = canvas.getContext("2d");
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
 
-      // Enviar frames a cada 200ms (5 FPS)
-      intervalId = setInterval(() => {
-          if (!stream || video.videoWidth === 0) return;
+    intervalId = setInterval(() => {
+      if (!stream || video.videoWidth === 0) return;
 
-          canvas.width = video.videoWidth;
-          canvas.height = video.videoHeight;
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
 
-          // Desenha o frame
-          ctx.drawImage(video, 0, 0);
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-          // Alta qualidade do JPEG 
-          const frameData = canvas.toDataURL("image/jpeg", 1.0);
+      // grayscale quebra o codigo n mexe <3
 
-          fetch("/process-frame/", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ frame: frameData })
-          })
-              .then(res => res.json())
-              .then(data => {
-                // Receni d volta
-                document.getElementById('response').textContent = data.sinal || "N recebi nd"
-                console.log(data)
+      // const frame = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      // const data = frame.data;
+      // for (let i = 0; i < data.length; i += 4) {
+      //   const g = (data[i] + data[i + 1] + data[i + 2]) / 3;
+      //   data[i] = data[i + 1] = data[i + 2] = g;
+      // }
+
+      // ctx.putImageData(frame, 0, 0);
+
+      // ctx.filter = "grayscale(100%)";
+      // ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+      // ctx.filter = "none";
+
+      canvas.toBlob(
+        (blob) => {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            fetch('/process-frame/', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ frame: reader.result }),
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                const response = document.getElementById('response');
+
+                if (data.sinal === 'Desconhecido') {
+                  response.textContent = 'Aguardando sinais...';
+                } else {
+                  response.textContent = data.sinal || 'Nenhum sinal detectado';
+                }
               })
-              .catch(err => console.error("Erro:", err));
-
-      }, 500);
-
+              .catch((err) => console.error('Erro ao processar frame:', err));
+          };
+          reader.readAsDataURL(blob);
+        },
+        'image/jpeg',
+        0.5
+      );
+    }, 500);
   } catch (err) {
-      console.error("Erro:", err);
-      alert("Erro ao acessar a câmera.");
+    console.error('Erro:', err);
+    alert('Erro ao acessar a câmera.');
   }
 }
 
-
 function stopCamera() {
   if (stream) {
+    if (intervalId != null) {
+      clearInterval(intervalId);
+    }
     const tracks = stream.getTracks();
     tracks.forEach((track) => track.stop());
     video.srcObject = null;
