@@ -1,0 +1,48 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I.A.R.A</title>
+    <link rel="stylesheet" href="{% static 'assets/global.css' %}">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex flex-row bg-[#1B262C] min-h-screen w-screen">
+
+    <div class="relative w-[60%] bg-cover bg-center" 
+     style="background-image: url({% static 'assets/images/banner.jpg' %});">
+        <div class="absolute inset-0 bg-black/55 z-10"></div>
+
+        <div class="absolute gap-5 inset-0 flex flex-col justify-center items-center z-20">
+            <img width="256" height="256" src="{% static 'assets/images/logo.png' %}"/>
+            <h1 class="croissant text-white text-6xl font-semibold">I.A.R.A</h1>
+            <span class="text-center croissant text-white w-96">
+                Seu gesto. Sua voz. Nossa tecnologia em uma inclusão que se adapta a você.
+            </span>
+        </div>
+
+    </div>
+
+    <div class="bg-[#C4BFFF] w-[40%] flex flex-col gap-6 items-center justify-center rounded-tl-md rounded-tr-md">
+        <h2 class="text-white text-6xl croissant mb-10">Entre já</h2>
+
+        <form class="bg-[#A29CFF] w-[75%] flex flex-col gap-6 p-6 pt-10 pb-10 rounded-md" action="{% url 'make_login' %}" method="post">
+            {% csrf_token %}
+            <div class="flex flex-col">
+                <label for="email" class="croissant">EMAIL:</label>
+                <input type="text" name="email" placeholder="seuemail@gmail.com" class="outline-none flex items-center p-2 rounded-md border placeholder:text-black text-black" required>
+            </div>
+
+            <div class="flex flex-col">
+                <label for="email" class="croissant">SENHA:</label>
+                <input type="password" name="password" placeholder="********" class="outline-none p-2 flex items-center rounded-md border placeholder:text-black text-black">
+            </div>
+
+            <button type="submit" class="bg-[#3E397C] font-bold flex justify-center p-2 items-center rounded-md text-white">ENTRAR</button>
+        </form>
+
+        <a class="text-black croissant" href="{% url 'make_register' %}">Criar conta</a>
+    </div>
+</body>
+</html>
