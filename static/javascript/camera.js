@@ -6,6 +6,29 @@ async function startCamera() {
     stream = await navigator.mediaDevices.getUserMedia({ video: true });
     video.srcObject = stream;
     video.style.display = 'block';
+    // Enviar frames para o Django
+  setInterval(() => {
+    if (!stream) return;
+    if (video.videoWidth === 0) return;
+
+    const canvas = document.createElement("canvas");
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    canvas.getContext("2d").drawImage(video, 0, 0);
+
+    const frameData = canvas.toDataURL("image/jpeg");
+
+    fetch("/process-frame/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ frame: frameData })
+    })
+      .then(res => res.json())
+      .then(data => console.log(data))
+      .catch(err => console.error("Erro:", err));
+
+  }, 200); // 5 FPS
+
   } catch (err) {
     console.error('Erro', err);
     alert('Erro ao acessar câmera.');
