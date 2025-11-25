@@ -30,26 +30,26 @@
         <form class="bg-[#A29CFF] w-[75%] flex flex-col gap-6 p-6 pt-10 pb-10 rounded-md" action="{% url 'make_register' %}" method="post">
             {% csrf_token %}
             <div class="flex flex-col">
-                <label for="email" class="croissant">NOME:</label>
-                <input type="text" name="username" placeholder="Seu nome" class="outline-none flex items-center p-2 rounded-md border placeholder:text-black text-black" required>
+                <label for="username" class="croissant text-[#1B262C]">NOME:</label>
+                <input type="text" name="username" placeholder="Seu nome" class="outline-none text-[14px] flex items-center p-2 rounded-md border text-black" required>
             </div>
 
             <div class="flex flex-col">
-                <label for="email" class="croissant">EMAIL:</label>
-                <input type="email" name="email" placeholder="seuemail@gmail.com" class="outline-none flex items-center p-2 rounded-md border placeholder:text-black text-black" required>
+                <label for="email" class="croissant text-[#1B262C]">EMAIL:</label>
+                <input type="email" name="email" placeholder="seuemail@gmail.com" class="outline-none text-[14px] flex items-center p-2 rounded-md border text-black" required>
             </div>
 
             <div class="flex flex-col">
-                <label for="email" class="croissant">SENHA:</label>
-                <input type="password" name="password" placeholder="********" class="outline-none p-2 flex items-center rounded-md border placeholder:text-black text-black" required>
+                <label for="password" class="croissant text-[#1B262C]">SENHA:</label>
+                <input type="password" name="password" placeholder="********" class="outline-none text-[14px] p-2 flex items-center rounded-md border text-black" required>
             </div>
 
             <div class="flex flex-col">
-                <label for="email" class="croissant">CONFIRMAR SENHA:</label>
-                <input type="password" name="password_confirm" placeholder="********" class="outline-none p-2 flex items-center rounded-md border placeholder:text-black text-black" required>
+                <label for="password_confirm" class="croissant text-[#1B262C]">CONFIRMAR SENHA:</label>
+                <input type="password" name="password_confirm" placeholder="********" class="outline-none text-[14px] p-2 flex items-center rounded-md border text-black" required>
             </div>
 
-            <button type="submit" class="bg-[#3E397C] font-bold flex justify-center p-2 items-center rounded-md text-white">CADASTRAR</button>
+            <button type="submit" class="bg-[#3E397C] font-bold flex justify-center p-2 items-center rounded-md text-white hover:opacity-60 transition-all ease-out cursor-pointer">CADASTRAR</button>
         </form>
 
         <a class="text-black croissant" href="{% url 'make_login' %}">Entrar em uma conta</a>
