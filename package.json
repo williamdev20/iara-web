@@ -1,0 +1,24 @@
+{
+  "name": "iara_desktop_version",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "tailwind:watch": "@tailwindcss/cli -i static/css/input.css -o static/css/output.css --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/williamdev20/iara-web.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/williamdev20/iara-web/issues"
+  },
+  "homepage": "https://github.com/williamdev20/iara-web#readme",
+  "dependencies": {
+    "@tailwindcss/cli": "^4.1.17",
+    "tailwindcss": "^4.1.17"
+  }
+}
