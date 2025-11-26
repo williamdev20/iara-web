@@ -3,5 +3,6 @@ from . import views
 
 urlpatterns = [
     path("", views.camera, name="camera"),
-    path("process-frame/", views.process_frame, name="process-frame")
+    path("process-frame/", views.process_frame, name="process-frame"),
+    path("tts/<str:sinal>/", views.tts_voice, name="tts-voice")
 ]
