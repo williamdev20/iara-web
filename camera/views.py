@@ -22,13 +22,13 @@ def process_frame(request):
         return JsonResponse({"erro": "Usa POST, amiguinho."}, status=405)
 
     try:
-        data = json.loads(request.body)
-        frame_base64 = data["frame"].split(",")[1]
+        data = json.loads(request.body) # Converte o json para dicionário python
+        frame_base64 = data["frame"].split(",")[1] # Pega apenas os dados da imagem em base64
 
-        img_bytes = base64.b64decode(frame_base64)
-        np_arr = np.frombuffer(img_bytes, np.uint8)
-        frame = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
-        frame = cv2.flip(frame, 1)
+        img_bytes = base64.b64decode(frame_base64) # Converte o a string base64 para base64 da imagem
+        np_arr = np.frombuffer(img_bytes, np.uint8) # Transformar os bytes em um array do Numpy, pois é o formato que o OpenCV usa
+        frame = cv2.imdecode(np_arr, cv2.IMREAD_COLOR) # Transforma o array de bytes em uma imagem colorida (RGB)
+        frame = cv2.flip(frame, 1) # Tipo, se você colocar a mão esquerda na foto, ele faz a sua mão virar a direita
 
 
         sinal, confianca = processing.processar_frame(frame)
