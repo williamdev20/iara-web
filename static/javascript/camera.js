@@ -1,6 +1,7 @@
 const video = document.getElementById('videoElement');
 let stream = null;
 let intervalId = null;
+let lastSignal = null;
 
 async function startCamera() {
   try {
@@ -51,11 +52,21 @@ async function startCamera() {
               .then((data) => {
                 const response = document.getElementById('response');
 
+                if (data.sinal !== lastSignal) {
+                  lastSignal = data.sinal;
+
+                  if (data.sinal !== "Desconhecido") {
+                    const voice = new Audio(data.voice_url);
+                    voice.play();
+                  }
+                }
+
                 if (data.sinal === 'Desconhecido') {
                   response.textContent = 'Aguardando sinais...';
                 } else {
                   response.textContent = data.sinal || 'Nenhum sinal detectado';
                 }
+              
               })
               .catch((err) => console.error('Erro ao processar frame:', err));
           };
