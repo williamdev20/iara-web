@@ -9,7 +9,8 @@ import json
 import base64
 import numpy as np
 import cv2
-# FALTA COLOCAR AS MENSAGENS DE ERRO TANTO NO CADASTRO QUANTO NO LOGIN, EU DO FUTURO
+
+
 @login_required(login_url="/accounts/login/")
 def camera(request):
     return render(request, "camera/camera.html")
