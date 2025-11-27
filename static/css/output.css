@@ -239,9 +239,6 @@
   .hidden {
     display: none;
   }
-  .h-\[50vh\] {
-    height: 50vh;
-  }
   .h-\[60px\] {
     height: 60px;
   }
@@ -274,9 +271,6 @@
   }
   .w-\[285px\] {
     width: 285px;
-  }
-  .w-auto {
-    width: auto;
   }
   .w-full {
     width: 100%;
@@ -422,9 +416,6 @@
   }
   .bg-center {
     background-position: center;
-  }
-  .object-contain {
-    object-fit: contain;
   }
   .object-cover {
     object-fit: cover;
@@ -685,11 +676,6 @@
       --tw-scale-y: 95%;
       --tw-scale-z: 95%;
       scale: var(--tw-scale-x) var(--tw-scale-y);
-    }
-  }
-  .md\:h-\[60vh\] {
-    @media (width >= 48rem) {
-      height: 60vh;
     }
   }
 }
